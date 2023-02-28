@@ -9,11 +9,11 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
-public class JDBCMemberRepository implements MemberRepository{
+public class JdbcMemberRepository implements MemberRepository{
 
     private final DataSource dataSource;
 
-    public JDBCMemberRepository(DataSource dataSource){
+    public JdbcMemberRepository(DataSource dataSource){
         this.dataSource = dataSource;
     }
 
@@ -45,38 +45,6 @@ public class JDBCMemberRepository implements MemberRepository{
         }finally{
             close(conn, pstmt, rs);
         }
-    }
-
-    private Connection getConnection(){
-        return DataSourceUtils.getConnection(dataSource);
-    }
-
-    private void close(Connection conn, PreparedStatement pstmt, ResultSet rs){
-        try{
-            if(rs != null){
-                rs.close();
-            }
-        } catch(SQLException e){
-            e.printStackTrace();
-        }
-        try{
-            if(pstmt != null){
-                pstmt.close();
-            }
-        } catch(SQLException e){
-            e.printStackTrace();
-        }
-        try{
-            if(conn != null){
-                close(conn);
-            }
-        } catch(SQLException e){
-            e.printStackTrace();
-        }
-    }
-
-    private void close(Connection conn) throws SQLException{
-        DataSourceUtils.releaseConnection(conn, dataSource);
     }
 
     @Override
@@ -167,6 +135,39 @@ public class JDBCMemberRepository implements MemberRepository{
         }finally{
             close(conn, pstmt, rs);
         }
+    }
+
+
+    private Connection getConnection(){
+        return DataSourceUtils.getConnection(dataSource);
+    }
+
+    private void close(Connection conn, PreparedStatement pstmt, ResultSet rs){
+        try{
+            if(rs != null){
+                rs.close();
+            }
+        } catch(SQLException e){
+            e.printStackTrace();
+        }
+        try{
+            if(pstmt != null){
+                pstmt.close();
+            }
+        } catch(SQLException e){
+            e.printStackTrace();
+        }
+        try{
+            if(conn != null){
+                close(conn);
+            }
+        } catch(SQLException e){
+            e.printStackTrace();
+        }
+    }
+
+    private void close(Connection conn) throws SQLException{
+        DataSourceUtils.releaseConnection(conn, dataSource);
     }
 
     @Override
